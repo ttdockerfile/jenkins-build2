@@ -41,7 +41,7 @@ ADD requirements.txt /data/app/python/requirements.txt
 
 # 配置 node
 WORKDIR /data/app/node/
-ADD node-v16.20.0-linux-x64.tar.xz /data/app/node/
+ADD node-v16.20.2-linux-x64.tar.xz /data/app/node/
 ADD node-v14.17.1-linux-x64.tar.xz /data/app/node/
 ADD node-v12.4.0-linux-x64.tar.xz /data/app/node/
 ADD node-v10.23.0-linux-x64.tar.xz /data/app/node/
