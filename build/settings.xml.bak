@@ -52,6 +52,7 @@ under the License.
      | Default: ${user.home}/.m2/repository
     <localRepository>/path/to/local/repo</localRepository>
     -->
+    <localRepository>/data/app/maven/data/repository</localRepository>
 
     <!-- interactiveMode
      | This will determine whether maven prompts you when it needs input. If set to false,
@@ -154,10 +155,16 @@ under the License.
      | server for that repository.
      |-->
     <mirrors>
+        <!--<mirror>-->
+            <!--<id>alimaven</id>-->
+            <!--<name>aliyun maven</name>-->
+            <!--<url>http://maven.aliyun.com/nexus/content/groups/public/</url>-->
+            <!--<mirrorOf>central</mirrorOf>-->
+        <!--</mirror>-->
         <mirror>
-            <id>alimaven</id>
-            <name>aliyun maven</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <id>nexus3</id>
+            <name>nexus3 maven</name>
+            <url>http://172.168.1.17:8088/repository/maven-public/</url>
             <mirrorOf>central</mirrorOf>
         </mirror>
         <!-- mirror
@@ -261,19 +268,19 @@ under the License.
         </profile>
         -->
         <profile>
-          <id>jdk8</id>
-          <activation>
-              <activeByDefault>true</activeByDefault>
-              <jdk>1.8</jdk>
-          </activation>
-          <properties>
-              <maven.compiler.source>1.8</maven.compiler.source>
-              <maven.compiler.target>1.8</maven.compiler.target>
-              <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
-              <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-              <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-              <os.detected.classifier>windows-x86_64</os.detected.classifier>
-          </properties>
+            <id>jdk8</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <jdk>1.8</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.source>1.8</maven.compiler.source>
+                <maven.compiler.target>1.8</maven.compiler.target>
+                <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+                <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+                <os.detected.classifier>linux-x86_64</os.detected.classifier>
+            </properties>
         </profile>
         <profile>
           <id>nexus3</id>
