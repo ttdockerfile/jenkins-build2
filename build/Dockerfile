@@ -7,7 +7,7 @@ localedef -c -f UTF-8 -i zh_CN zh_CN.utf8 && \
 export LANG=zh_CN.UTF-8
 
 # 基础软件安装
-
+ADD CentOS-Base.repo /etc/yum.repos.d
 RUN yum install -y --setopt=tsflags=nodocs zip unzip git subversion java-1.8.0-openjdk-devel.x86_64 java-11-openjdk-devel.x86_64 && \
 yum clean all
 # 设置 svn
@@ -70,7 +70,7 @@ RUN yum install -y --setopt=tsflags=nodocs docker-ce && \
 yum clean all
 
 # 配置 jenkins
-ENV JENKINS_VERSION 2.452.1
+ENV JENKINS_VERSION 2.470
 WORKDIR /data/app/jenkins/
 COPY jenkins-${JENKINS_VERSION}.war /data/app/jenkins/
 ENV JENKINS_HOME /data/app/jenkins/data/

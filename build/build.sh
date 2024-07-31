@@ -1,6 +1,6 @@
 #!/bin/bash
 
-jenkins_version=2.452.1
+jenkins_version=2.470
 python3_version=3.12.3
 
 if [ ! -f apache-maven-3.6.3-bin.zip ];then
