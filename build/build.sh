@@ -2,6 +2,7 @@
 
 jenkins_version=2.470
 python3_version=3.12.3
+golang_version=1.22.5
 
 if [ ! -f apache-maven-3.6.3-bin.zip ];then
     wget https://github.com/buyfakett/centos7_initialization/releases/download/v1.2.3/apache-maven-3.6.3-bin.zip
@@ -24,9 +25,12 @@ fi
 if [ ! -f Python-${python3_version}.tgz ];then
     wget https://www.python.org/ftp/python/${python3_version}/Python-${python3_version}.tgz
 fi
+if [ ! -f go${golang_version}.linux-amd64.tar.gz ];then
+    wget https://go.dev/dl/go${golang_version}.linux-amd64.tar.gz
+fi
 if [ ! -f jenkins-${jenkins_version}.war ];then
     # wget jenkins-${jenkins_version}.war https://mirrors.tuna.tsinghua.edu.cn/jenkins/war/${jenkins_version}/jenkins.war
     wget -O jenkins-${jenkins_version}.war https://get.jenkins.io/war-stable/${jenkins_version}/jenkins.war
 fi
 
-docker build -t buyfakett/jenkins:${jenkins_version} .
+docker build --build-arg JENKINS_VERSION=${jenkins_version} --build-arg PYTHON3_VERSION=${python3_version} --build-arg GOLANG_VERSION=${golang_version} -t buyfakett/jenkins:${jenkins_version} .

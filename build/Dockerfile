@@ -1,13 +1,14 @@
 FROM centos:7.9.2009
 USER root
 
+ADD CentOS-Base.repo /etc/yum.repos.d/
+
 # svn中文乱码
 RUN yum install -y --setopt=tsflags=nodocs kde-l10n-Chinese glibc-common && \
 localedef -c -f UTF-8 -i zh_CN zh_CN.utf8 && \
 export LANG=zh_CN.UTF-8
 
 # 基础软件安装
-ADD CentOS-Base.repo /etc/yum.repos.d
 RUN yum install -y --setopt=tsflags=nodocs zip unzip git subversion java-1.8.0-openjdk-devel.x86_64 java-11-openjdk-devel.x86_64 && \
 yum clean all
 # 设置 svn
@@ -31,7 +32,7 @@ ADD settings.xml /data/app/maven/apache-maven-3.6.3/conf/settings.xml
 ENV PATH=/data/app/maven/apache-maven-3.6.3/bin:$PATH
 
 # 安装 python3
-ENV PYTHON3_VERSION 3.12.3
+ARG PYTHON3_VERSION
 WORKDIR /data/app/python/
 RUN yum install -y --setopt=tsflags=nodocs zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc gcc-c++ make libffi-devel && \
 yum clean all
@@ -69,8 +70,15 @@ ADD docker-ce.repo /etc/yum.repos.d/
 RUN yum install -y --setopt=tsflags=nodocs docker-ce && \
 yum clean all
 
+# 安装golang
+WORKDIR /data/app/golang/
+ARG GOLANG_VERSION
+COPY go${GOLANG_VERSION}.linux-amd64.tar.gz .
+RUN tar -C /usr/local -xzf go${GOLANG_VERSION}.linux-amd64.tar.gz
+ENV PATH=$PATH:/usr/local/go/bin
+
 # 配置 jenkins
-ENV JENKINS_VERSION 2.470
+ARG JENKINS_VERSION
 WORKDIR /data/app/jenkins/
 COPY jenkins-${JENKINS_VERSION}.war /data/app/jenkins/
 ENV JENKINS_HOME /data/app/jenkins/data/
