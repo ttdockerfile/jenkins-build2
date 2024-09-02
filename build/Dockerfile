@@ -1,29 +1,29 @@
-FROM centos:7.9.2009
+FROM debian:12.6
 USER root
 
-ADD CentOS-Base.repo /etc/yum.repos.d/
+# 换源
+# ADD debian.sources /etc/yum.repos.d/
+# RUN mkdir -p /etc/apt/sources.list.d/ && \
+# echo "" > /etc/apt/sources.list && \
+# apt-get update
+RUN echo "deb http://ftp.de.debian.org/debian sid main " >> /etc/apt/sources.list && apt-get update -y
 
 # svn中文乱码
-RUN yum install -y --setopt=tsflags=nodocs kde-l10n-Chinese glibc-common && \
-localedef -c -f UTF-8 -i zh_CN zh_CN.utf8 && \
-export LANG=zh_CN.UTF-8
+ENV LANG=zh_CN.UTF-8
+RUN apt-get install -y locales && \
+locale-gen zh_CN.UTF-8
 
 # 基础软件安装
-RUN yum install -y --setopt=tsflags=nodocs zip unzip git subversion java-1.8.0-openjdk-devel.x86_64 java-11-openjdk-devel.x86_64 && \
-yum clean all
+RUN apt-get install -y zip unzip git curl subversion openjdk-8-jdk openjdk-11-jdk openjdk-21-jdk
 # 设置 svn
 RUN svn --version && \
 sed -i 's/# store-passwords = no/store-passwords = yes/g' /root/.subversion/servers && \
 sed -i 's/# store-plaintext-passwords = no/store-plaintext-passwords = yes/g' /root/.subversion/servers && \
 echo -e "[auth]\nstore-passwords = no\n[helpers]\n[tunnels]\n[miscellany]\n[auto-props]\n" > ~/.subversion/config
 
-# 安装java21
-WORKDIR /data/app/java/
-ADD jdk-21.0.2_linux-x64_bin.rpm /data/app/java/
-RUN yum localinstall -y --setopt=tsflags=nodocs jdk-21.0.2_linux-x64_bin.rpm && \
-yum clean all
 # 设置 java 环境
-ENV JAVA_HOME=/usr/lib/jvm/java
+ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ENV PATH="$JAVA_HOME/bin:$PATH"
 # 配置 maven
 WORKDIR /data/app/maven/
 ADD apache-maven-3.6.3-bin.zip /data/app/maven/
@@ -31,30 +31,16 @@ RUN unzip -d /data/app/maven/ apache-maven-3.6.3-bin.zip && ln -s /data/app/mave
 ADD settings.xml /data/app/maven/apache-maven-3.6.3/conf/settings.xml
 ENV PATH=/data/app/maven/apache-maven-3.6.3/bin:$PATH
 
-# 安装 python3
-ARG PYTHON3_VERSION
-WORKDIR /data/app/python/
-RUN yum install -y --setopt=tsflags=nodocs zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc gcc-c++ make libffi-devel && \
-yum clean all
-ADD Python-${PYTHON3_VERSION}.tgz /data/app/python/
-RUN cd Python-${PYTHON3_VERSION} && ./configure prefix=/usr/local/python3 && make -j 4 && make install && \
-rm -rf /usr/bin/python && \
-ln -s /usr/local/python3/bin/python3.12 /usr/bin/python && \
-ln -s /usr/local/python3/bin/python3.12 /usr/bin/python3.12 && \
-rm -rf /usr/bin/pip && rm -rf /usr/bin/pip3 && \
-ln -s /usr/local/python3/bin/pip3.12 /usr/bin/pip && \
-ln -s /usr/local/python3/bin/pip3.12 /usr/bin/pip3 && \
-python -V && \
-sed -i 's$/usr/bin/python$/usr/bin/python2$g' /usr/bin/yum && \
-sed -i 's$/usr/bin/python$/usr/bin/python2$g' /usr/libexec/urlgrabber-ext-down
 ADD requirements.txt /data/app/python/requirements.txt
 
 # 配置 node
 WORKDIR /data/app/node/
-ADD node-v16.20.2-linux-x64.tar.xz /data/app/node/
+ADD node-v10.24.1-linux-x64.tar.xz /data/app/node/
 ADD node-v14.17.1-linux-x64.tar.xz /data/app/node/
-ADD node-v12.4.0-linux-x64.tar.xz /data/app/node/
-ADD node-v10.23.0-linux-x64.tar.xz /data/app/node/
+ADD node-v16.20.0-linux-x64.tar.xz /data/app/node/
+ADD node-v17.5.0-linux-x64.tar.xz /data/app/node/
+ADD node-v18.20.4-linux-x64.tar.xz /data/app/node/
+ADD node-v20.17.0-linux-x64.tar.xz /data/app/node/
 RUN ln -s /data/app/node/node-v14.17.1-linux-x64/ /data/app/node/node
 ENV NODE_PATH=/data/app/node/data/node_global/node_modules
 ENV PATH=/data/app/node/node/bin:$PATH
@@ -66,9 +52,17 @@ npm config set cache "/data/app/node/data/node_cache" && \
 npm config set registry https://registry.npmmirror.com
 
 # 安装docker-ce
-ADD docker-ce.repo /etc/yum.repos.d/
-RUN yum install -y --setopt=tsflags=nodocs docker-ce && \
-yum clean all
+# ADD docker-ce.repo /etc/yum.repos.d/
+# RUN yum install -y --setopt=tsflags=nodocs docker-ce && \
+# yum clean all
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
+chmod a+r /etc/apt/keyrings/docker.asc && \
+echo \
+"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+bullseye stable" | \
+tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+apt-get update && \
+apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # 安装golang
 WORKDIR /data/app/golang/
