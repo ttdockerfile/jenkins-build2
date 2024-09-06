@@ -24,6 +24,7 @@ echo -e "[auth]\nstore-passwords = no\n[helpers]\n[tunnels]\n[miscellany]\n[auto
 # 设置 java 环境
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 ENV PATH="$JAVA_HOME/bin:$PATH"
+RUN ln -s /usr/lib/jvm/java-8-openjdk-amd64/ /usr/lib/jvm/java
 # 配置 maven
 WORKDIR /data/app/maven/
 ADD apache-maven-3.6.3-bin.zip /data/app/maven/
