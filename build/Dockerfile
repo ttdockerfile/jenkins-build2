@@ -1,11 +1,6 @@
 FROM debian:12.6
 USER root
 
-# 换源
-# ADD debian.sources /etc/yum.repos.d/
-# RUN mkdir -p /etc/apt/sources.list.d/ && \
-# echo "" > /etc/apt/sources.list && \
-# apt-get update
 RUN echo "deb http://ftp.de.debian.org/debian sid main " >> /etc/apt/sources.list && apt-get update -y
 
 # svn中文乱码
@@ -52,10 +47,7 @@ npm config set prefix "/data/app/node/data/node_global" && \
 npm config set cache "/data/app/node/data/node_cache" && \
 npm config set registry https://registry.npmmirror.com
 
-# 安装docker-ce
-# ADD docker-ce.repo /etc/yum.repos.d/
-# RUN yum install -y --setopt=tsflags=nodocs docker-ce && \
-# yum clean all
+# 安装 docker
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
 chmod a+r /etc/apt/keyrings/docker.asc && \
 echo \
@@ -65,7 +57,7 @@ tee /etc/apt/sources.list.d/docker.list > /dev/null && \
 apt-get update && \
 apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-# 安装golang
+# 安装 golang
 WORKDIR /data/app/golang/
 ARG GOLANG_VERSION
 COPY go${GOLANG_VERSION}.linux-amd64.tar.gz .
