@@ -33,4 +33,4 @@ if [ ! -f jenkins-${jenkins_version}.war ];then
     wget -O jenkins-${jenkins_version}.war https://get.jenkins.io/war/${jenkins_version}/jenkins.war
 fi
 
-docker build --build-arg JENKINS_VERSION=${jenkins_version} --build-arg --build-arg GOLANG_VERSION=${golang_version} -t buyfakett/jenkins:${jenkins_version} .
+docker build --build-arg JENKINS_VERSION=${jenkins_version} --build-arg GOLANG_VERSION=${golang_version} -t buyfakett/jenkins:${jenkins_version} .

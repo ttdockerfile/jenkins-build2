@@ -1,12 +1,16 @@
 FROM debian:12.6
 USER root
 
+ADD requirements.txt /data/app/python/requirements.txt
+
 RUN echo "deb http://ftp.de.debian.org/debian sid main " >> /etc/apt/sources.list && apt-get update -y
 
 # svn中文乱码
 ENV LANG=zh_CN.UTF-8
 RUN apt-get install -y locales && \
-locale-gen zh_CN.UTF-8
+sed -i '/zh_CN.UTF-8/s/^# //g' /etc/locale.gen && \
+locale-gen zh_CN.UTF-8 && \
+update-locale LANG=zh_CN.UTF-8
 
 # 基础软件安装
 RUN apt-get install -y zip unzip git curl subversion openjdk-8-jdk openjdk-11-jdk openjdk-21-jdk
@@ -14,7 +18,7 @@ RUN apt-get install -y zip unzip git curl subversion openjdk-8-jdk openjdk-11-jd
 RUN svn --version && \
 sed -i 's/# store-passwords = no/store-passwords = yes/g' /root/.subversion/servers && \
 sed -i 's/# store-plaintext-passwords = no/store-plaintext-passwords = yes/g' /root/.subversion/servers && \
-echo -e "[auth]\nstore-passwords = no\n[helpers]\n[tunnels]\n[miscellany]\n[auto-props]\n" > ~/.subversion/config
+echo "[auth]\nstore-passwords = no\n[helpers]\n[tunnels]\n[miscellany]\n[auto-props]" > /root/.subversion/config
 
 # 设置 java 环境
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
@@ -27,7 +31,15 @@ RUN unzip -d /data/app/maven/ apache-maven-3.6.3-bin.zip && ln -s /data/app/mave
 ADD settings.xml /data/app/maven/apache-maven-3.6.3/conf/settings.xml
 ENV PATH=/data/app/maven/apache-maven-3.6.3/bin:$PATH
 
-ADD requirements.txt /data/app/python/requirements.txt
+# 安装 docker
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
+chmod a+r /etc/apt/keyrings/docker.asc && \
+echo \
+"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+bullseye stable" | \
+tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+apt-get update && \
+apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # 配置 node
 WORKDIR /data/app/node/
