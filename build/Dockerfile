@@ -59,16 +59,6 @@ npm config set prefix "/data/app/node/data/node_global" && \
 npm config set cache "/data/app/node/data/node_cache" && \
 npm config set registry https://registry.npmmirror.com
 
-# 安装 docker
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
-chmod a+r /etc/apt/keyrings/docker.asc && \
-echo \
-"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-bullseye stable" | \
-tee /etc/apt/sources.list.d/docker.list > /dev/null && \
-apt-get update && \
-apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
 # 安装 golang
 WORKDIR /data/app/golang/
 ARG GOLANG_VERSION
