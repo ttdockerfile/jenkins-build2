@@ -55,8 +55,8 @@ ENV PATH=/data/app/node/node/bin:$PATH
 ENV PATH=/data/app/node/data/node_global/bin:$PATH
 RUN mkdir -p /data/app/node/data/node_global && \
 mkdir -p /data/app/node/data/node_cache && \
-npm config set prefix "/data/app/node/data/node_global" && \
-npm config set cache "/data/app/node/data/node_cache" && \
+npm config set prefix "/data/app/node/data/v14.17.1/node_global" && \
+npm config set cache "/data/app/node/data/v14.17.1/node_cache" && \
 npm config set registry https://registry.npmmirror.com
 
 # 安装 golang
