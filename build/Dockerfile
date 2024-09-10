@@ -13,7 +13,7 @@ locale-gen zh_CN.UTF-8 && \
 update-locale LANG=zh_CN.UTF-8
 
 # 基础软件安装
-RUN apt-get install -y zip unzip git curl subversion openjdk-8-jdk openjdk-11-jdk openjdk-21-jdk
+RUN apt-get install -y zip unzip git curl subversion openjdk-8-jdk openjdk-11-jdk openjdk-21-jdk python3 python3-pip
 # 设置 svn
 RUN svn --version && \
 sed -i 's/# store-passwords = no/store-passwords = yes/g' /root/.subversion/servers && \
@@ -58,6 +58,9 @@ mkdir -p /data/app/node/data/node_cache && \
 npm config set prefix "/data/app/node/data/v14.17.1/node_global" && \
 npm config set cache "/data/app/node/data/v14.17.1/node_cache" && \
 npm config set registry https://registry.npmmirror.com
+
+# 设置默认python
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 
 # 安装 golang
 WORKDIR /data/app/golang/
