@@ -11,12 +11,13 @@ docker run -d --name jenkins-${port} \
 -p ${port}:8080 \
 --restart=always \
 --hostname $(hostname) \
+-e LC_ALL="zh_CN.UTF-8" \
+-e LANG="zh_CN.UTF-8" \
+-e JENKINS_VERSION="${jenkins_version}" \
 -v /var/run/docker.sock:/var/run/docker.sock \
 -v /etc/hosts:/etc/hosts:ro \
 -v /etc/localtime:/etc/localtime:ro \
 -v /etc/timezone:/etc/timezone:ro \
--e LC_ALL="zh_CN.UTF-8" \
--e LANG="zh_CN.UTF-8" \
 -v ./maven/data:/data/app/maven/data \
 -v ./node/data:/data/app/node/data \
 -v ./tools:/data/app/tools \
