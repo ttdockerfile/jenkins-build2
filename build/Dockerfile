@@ -10,10 +10,24 @@ ENV LANG=zh_CN.UTF-8
 RUN apt-get install -y locales && \
 sed -i '/zh_CN.UTF-8/s/^# //g' /etc/locale.gen && \
 locale-gen zh_CN.UTF-8 && \
-update-locale LANG=zh_CN.UTF-8
+update-locale LANG=zh_CN.UTF-8 \
+rm -rf \
+/tmp/* \
+/usr/share/doc/* \
+/var/cache/* \
+/var/lib/apt/lists/* \
+/var/tmp/* \
+/var/log/*
 
 # 基础软件安装
-RUN apt-get install -y zip unzip git curl subversion openjdk-8-jdk openjdk-11-jdk openjdk-21-jdk python3 python3-pip
+RUN apt-get install -y zip unzip git curl subversion openjdk-8-jdk openjdk-11-jdk openjdk-21-jdk python3 python3-pip \
+rm -rf \
+/tmp/* \
+/usr/share/doc/* \
+/var/cache/* \
+/var/lib/apt/lists/* \
+/var/tmp/* \
+/var/log/*
 # 设置 svn
 RUN svn --version && \
 sed -i 's/# store-passwords = no/store-passwords = yes/g' /root/.subversion/servers && \
@@ -39,7 +53,14 @@ echo \
 bullseye stable" | \
 tee /etc/apt/sources.list.d/docker.list > /dev/null && \
 apt-get update && \
-apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
+rm -rf \
+/tmp/* \
+/usr/share/doc/* \
+/var/cache/* \
+/var/lib/apt/lists/* \
+/var/tmp/* \
+/var/log/*
 
 # 配置 node
 WORKDIR /data/app/node/
