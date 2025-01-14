@@ -1,4 +1,4 @@
-FROM debian:12.6
+FROM debian:12.9
 USER root
 
 ADD requirements.txt /data/app/python/requirements.txt
