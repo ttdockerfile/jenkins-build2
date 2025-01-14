@@ -33,4 +33,13 @@ if [ ! -f jenkins-${jenkins_version}.war ];then
     wget -O jenkins-${jenkins_version}.war https://get.jenkins.io/war/${jenkins_version}/jenkins.war
 fi
 
-docker build --build-arg JENKINS_VERSION=${jenkins_version} --build-arg GOLANG_VERSION=${golang_version} -t buyfakett/jenkins:${jenkins_version} .
+if [ "$1"x == "agent"x ];then
+    if [ -f agent.jar ];then
+        docker build -f Dockerfile-agent --build-arg GOLANG_VERSION=${golang_version} -t buyfakett/jenkins:${jenkins_version}-agent .
+    else
+        echo "请先准备agent.jar"
+        exit 1
+    fi
+else
+    docker build --build-arg JENKINS_VERSION=${jenkins_version} --build-arg GOLANG_VERSION=${golang_version} -t buyfakett/jenkins:${jenkins_version} .
+fi
