@@ -2,7 +2,7 @@
 echo 'Asia/Shanghai' > /etc/timezone
 
 port=8081
-jenkins_version=2.452.1
+jenkins_version=2.475
 
 docker kill jenkins-${port}
 docker rm jenkins-${port}
@@ -24,4 +24,3 @@ docker run -d --name jenkins-${port} \
 -v ./data-${port}:/data/app/jenkins/data \
 registry.cn-hangzhou.aliyuncs.com/buyfakett/jenkins:${jenkins_version}
 
-# -v ./run.sh:/data/app/jenkins/run.sh \
