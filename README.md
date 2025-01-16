@@ -13,6 +13,14 @@
 
 在`docker hub`和阿里云的镜像站我都有上传我的自己用服务器打包的，直接下载即可(加上tag就可以下载到我对应的分支)
 
+启动实例详见[setup.sh](setup.sh)和[setup-agent.sh](setup-agent.sh)
+
+如果要覆盖启动脚本，可以详见
+
+[run.sh](build/run.sh),覆盖方式`-v ./run.sh:/data/app/jenkins/run.sh \`
+
+[run-agent.sh](build/run-agent.sh),覆盖方式`-v ./run-agent.sh:/data/app/jenkins/run-agent.sh \`
+
 ```shell
 docker pull buyfakett/jenkins
 ```
