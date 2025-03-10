@@ -1,10 +1,13 @@
 #!/bin/bash
 
-jenkins_version=2.492
-golang_version=1.23.4
+jenkins_version=2.500
+golang_version=1.24.1
 
 if [ ! -f apache-maven-3.6.3-bin.zip ];then
     wget https://github.com/buyfakett/centos7_initialization/releases/download/v1.2.3/apache-maven-3.6.3-bin.zip
+fi
+if [ ! -f node-v22.14.0-linux-x64.tar.xz ];then
+    wget https://github.com/buyfakett/centos7_initialization/releases/download/v1.2.3/node-v22.14.0-linux-x64.tar.xz
 fi
 if [ ! -f node-v20.17.0-linux-x64.tar.xz ];then
     wget https://github.com/buyfakett/centos7_initialization/releases/download/v1.2.3/node-v20.17.0-linux-x64.tar.xz
