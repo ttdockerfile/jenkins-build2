@@ -1,13 +1,10 @@
 FROM debian:12.9
 USER root
 
-ADD requirements.txt /data/app/python/requirements.txt
-
-RUN echo "deb http://ftp.de.debian.org/debian sid main " >> /etc/apt/sources.list && apt-get update -y
-
 # svn中文乱码
 ENV LANG=zh_CN.UTF-8
-RUN apt-get install -y locales && \
+RUN echo "deb http://ftp.de.debian.org/debian sid main " >> /etc/apt/sources.list && apt-get update -y && \
+apt-get install -y locales && \
 sed -i '/zh_CN.UTF-8/s/^# //g' /etc/locale.gen && \
 locale-gen zh_CN.UTF-8 && \
 update-locale LANG=zh_CN.UTF-8 && \
@@ -28,10 +25,9 @@ rm -rf \
 /var/cache/* \
 /var/lib/apt/lists/* \
 /var/tmp/* \
-/var/log/*
-
+/var/log/* && \
 # 设置 svn
-RUN svn --version && \
+svn --version && \
 sed -i 's/# store-passwords = no/store-passwords = yes/g' /root/.subversion/servers && \
 sed -i 's/# store-plaintext-passwords = no/store-plaintext-passwords = yes/g' /root/.subversion/servers && \
 echo "[auth]\nstore-passwords = no\n[helpers]\n[tunnels]\n[miscellany]\n[auto-props]" > /root/.subversion/config
@@ -55,6 +51,7 @@ ADD node-v16.20.0-linux-x64.tar.xz /data/app/node/
 ADD node-v17.5.0-linux-x64.tar.xz /data/app/node/
 ADD node-v18.20.4-linux-x64.tar.xz /data/app/node/
 ADD node-v20.17.0-linux-x64.tar.xz /data/app/node/
+ADD node-v22.14.0-linux-x64.tar.xz /data/app/node/
 RUN ln -s /data/app/node/node-v14.17.1-linux-x64/ /data/app/node/node
 ENV NODE_PATH=/data/app/node/data/node_global/node_modules
 ENV PATH=/data/app/node/node/bin:$PATH
