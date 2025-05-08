@@ -28,4 +28,6 @@ docker run -d --name jenkins-agent \
 -v ./node/data:/data/app/node/data \
 -v ./tools:/data/app/tools \
 -v ./data:/data/app/jenkins/data \
-registry.cn-hangzhou.aliyuncs.com/buyfakett/jenkins:${jenkins_version}-agent
+buyfakett/jenkins:${jenkins_version}-agent
+
+# registry.cn-hangzhou.aliyuncs.com/buyfakett/jenkins:${jenkins_version}-agent

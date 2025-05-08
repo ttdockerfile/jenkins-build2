@@ -1,4 +1,4 @@
-FROM debian:12.9
+FROM debian:12.10
 USER root
 
 # svn中文乱码

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-jenkins_version=2.500
-golang_version=1.24.1
+jenkins_version=2.509
+golang_version=1.24.3
 
 if [ ! -f apache-maven-3.6.3-bin.zip ];then
     wget https://github.com/buyfakett/centos7_initialization/releases/download/v1.2.3/apache-maven-3.6.3-bin.zip
