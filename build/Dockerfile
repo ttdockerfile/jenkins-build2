@@ -3,7 +3,9 @@ USER root
 
 # svn中文乱码
 ENV LANG=zh_CN.UTF-8
-RUN echo "deb http://ftp.de.debian.org/debian sid main " >> /etc/apt/sources.list && apt-get update -y && \
+RUN echo "deb http://ftp.de.debian.org/debian sid main " >> /etc/apt/sources.list && \
+apt-get update -y && \
+apt-get upgrade -y && \
 apt-get install -y locales && \
 sed -i '/zh_CN.UTF-8/s/^# //g' /etc/locale.gen && \
 locale-gen zh_CN.UTF-8 && \
