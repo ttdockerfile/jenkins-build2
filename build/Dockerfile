@@ -1,4 +1,4 @@
-FROM debian:12.9
+FROM debian:12.10
 USER root
 
 # svn中文乱码
@@ -70,9 +70,10 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 # 安装 golang
 WORKDIR /data/app/golang/
 ARG GOLANG_VERSION
-COPY go${GOLANG_VERSION}.linux-amd64.tar.gz .
-RUN tar -C /usr/local -xzf go${GOLANG_VERSION}.linux-amd64.tar.gz
+COPY go /usr/local/go
 ENV PATH=$PATH:/usr/local/go/bin
+RUN go env -w GOCACHE=/data/app/golang/.cache/go-build && \
+go env -w GOPATH=/data/app/golang/go
 
 # 配置 jenkins
 ARG JENKINS_VERSION

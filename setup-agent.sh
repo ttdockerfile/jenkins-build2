@@ -27,5 +27,6 @@ docker run -d --name jenkins-agent \
 -v ./maven/data:/data/app/maven/data \
 -v ./node/data:/data/app/node/data \
 -v ./tools:/data/app/tools \
+-v ./golang:/data/app/golang \
 -v ./data:/data/app/jenkins/data \
-registry.cn-hangzhou.aliyuncs.com/buyfakett/jenkins:${jenkins_version}-agent
+buyfakett/jenkins:${jenkins_version}-agent

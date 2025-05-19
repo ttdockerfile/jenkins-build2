@@ -1,7 +1,7 @@
 #!/bin/bash
 
-jenkins_version=2.500
-golang_version=1.24.1
+jenkins_version=2.510
+golang_version=1.24.3
 
 if [ ! -f apache-maven-3.6.3-bin.zip ];then
     wget https://github.com/buyfakett/centos7_initialization/releases/download/v1.2.3/apache-maven-3.6.3-bin.zip
@@ -35,6 +35,9 @@ if [ ! -f jenkins-${jenkins_version}.war ];then
     # wget -O jenkins-${jenkins_version}.war https://get.jenkins.io/war-stable/${jenkins_version}/jenkins.war
     wget -O jenkins-${jenkins_version}.war https://get.jenkins.io/war/${jenkins_version}/jenkins.war
 fi
+
+rm -rf go/
+tar -xzf go${GOLANG_VERSION}.linux-amd64.tar.gz
 
 if [ "$1"x == "agent"x ];then
     if [ -f agent.jar ];then
