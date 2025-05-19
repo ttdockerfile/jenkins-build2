@@ -37,7 +37,7 @@ if [ ! -f jenkins-${jenkins_version}.war ];then
 fi
 
 rm -rf go/
-tar -xzf go${GOLANG_VERSION}.linux-amd64.tar.gz
+tar -xzf go${golang_version}.linux-amd64.tar.gz
 
 if [ "$1"x == "agent"x ];then
     if [ -f agent.jar ];then
