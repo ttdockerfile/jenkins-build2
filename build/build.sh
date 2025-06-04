@@ -1,6 +1,6 @@
 #!/bin/bash
 
-jenkins_version=2.510
+jenkins_version=2.513
 golang_version=1.24.3
 
 if [ ! -f apache-maven-3.6.3-bin.zip ];then
@@ -36,8 +36,9 @@ if [ ! -f jenkins-${jenkins_version}.war ];then
     wget -O jenkins-${jenkins_version}.war https://get.jenkins.io/war/${jenkins_version}/jenkins.war
 fi
 
-rm -rf go/
+rm -rf go/ maven/
 tar -xzf go${golang_version}.linux-amd64.tar.gz
+mkdir maven && unzip -d maven/ apache-maven-3.6.3-bin.zip
 
 if [ "$1"x == "agent"x ];then
     if [ -f agent.jar ];then
