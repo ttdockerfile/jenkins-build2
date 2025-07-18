@@ -28,6 +28,9 @@ ENV PATH=$PATH:/usr/local/go/bin
 RUN go env -w GOCACHE=/data/app/golang/.cache/go-build && \
 go env -w GOPATH=/data/app/golang/go
 
+# upx
+COPY upx /usr/local/bin/upx
+
 # svn中文乱码
 ENV LANG=zh_CN.UTF-8
 RUN echo "deb http://ftp.de.debian.org/debian sid main " >> /etc/apt/sources.list && \
@@ -37,7 +40,7 @@ sed -i '/zh_CN.UTF-8/s/^# //g' /etc/locale.gen && \
 locale-gen zh_CN.UTF-8 && \
 update-locale LANG=zh_CN.UTF-8 && \
 # 基础软件安装
-apt-get install -y zip unzip git curl subversion openjdk-8-jdk openjdk-11-jdk openjdk-21-jdk python3 python3-pip screen upx net-tools telnet vim && \
+apt-get install -y zip unzip git curl subversion openjdk-8-jdk openjdk-11-jdk openjdk-21-jdk python3 python3-pip screen net-tools telnet vim wget && \
 # 安装 docker
 curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
 chmod a+r /etc/apt/keyrings/docker.asc && \

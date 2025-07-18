@@ -1,7 +1,7 @@
 #!/bin/bash
 
-jenkins_version=2.513
-golang_version=1.24.4
+jenkins_version=2.519
+golang_version=1.24.5
 
 if [ ! -f apache-maven-3.6.3-bin.zip ];then
     wget https://github.com/buyfakett/centos7_initialization/releases/download/v1.2.3/apache-maven-3.6.3-bin.zip
@@ -39,6 +39,13 @@ fi
 rm -rf go/ maven/
 tar -xzf go${golang_version}.linux-amd64.tar.gz
 mkdir maven && unzip -d maven/ apache-maven-3.6.3-bin.zip
+
+rm -rf upx*
+upx_version=$(curl -s https://api.github.com/repos/upx/upx/releases/latest | grep tag_name | cut -d '"' -f 4)
+curl -LO https://github.com/upx/upx/releases/download/${upx_version}/upx-${upx_version:1}-amd64_linux.tar.xz
+tar -xJf upx-${upx_version:1}-amd64_linux.tar.xz
+mv upx-${upx_version:1}-amd64_linux/upx upx
+rm -rf upx-${upx_version:1}-amd64_linux*
 
 if [ "$1"x == "agent"x ];then
     if [ -f agent.jar ];then

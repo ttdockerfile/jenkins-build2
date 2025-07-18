@@ -1,7 +1,7 @@
 #!/bin/bash
 echo 'Asia/Shanghai' > /etc/timezone
 
-jenkins_version=2.510
+jenkins_version=2.519
 url=""
 secret=""
 name="test"
