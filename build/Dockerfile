@@ -41,7 +41,7 @@ locale-gen zh_CN.UTF-8 && \
 update-locale LANG=zh_CN.UTF-8 && \
 # 基础软件安装
 apt-get install -y zip unzip git curl subversion openjdk-8-jdk openjdk-11-jdk openjdk-21-jdk python3 python3-pip screen net-tools telnet vim wget exa && \
-echo "alias ll='ls -alF --color=auto'" >> /root/.bashrc && \
+echo "alias ll='exa -al --color=always'" >> /root/.bashrc && \
 # 安装 docker
 curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
 chmod a+r /etc/apt/keyrings/docker.asc && \
