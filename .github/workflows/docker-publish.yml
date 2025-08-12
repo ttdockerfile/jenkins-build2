@@ -37,7 +37,7 @@ jobs:
         run: |
           cd build
           chmod 755 *.sh
-          ./build.sh ${{ env.JENKINS_VERSION }}
+          ./auto_build.sh ${{ env.JENKINS_VERSION }}
           docker push ${{ env.IMAGE_NAME }}:${{ env.JENKINS_VERSION }}
 
       # - name: Build Docker Image

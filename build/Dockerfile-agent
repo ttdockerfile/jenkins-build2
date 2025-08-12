@@ -1,4 +1,4 @@
-FROM debian:12.11
+FROM debian:trixie
 USER root
 
 # 配置 node
@@ -40,15 +40,14 @@ sed -i '/zh_CN.UTF-8/s/^# //g' /etc/locale.gen && \
 locale-gen zh_CN.UTF-8 && \
 update-locale LANG=zh_CN.UTF-8 && \
 # 基础软件安装
-apt-get install -y zip unzip git curl subversion openjdk-8-jdk openjdk-11-jdk openjdk-21-jdk python3 python3-pip screen net-tools telnet vim wget exa && \
-echo "alias ll='exa -al --color=always'" >> /root/.bashrc && \
+apt-get install -y zip unzip git curl subversion openjdk-8-jdk openjdk-11-jdk openjdk-21-jdk python3 python3-pip screen net-tools telnet vim wget eza && \
+echo "alias ll='eza -al --color=always'" >> /root/.bashrc && \
 # 安装 docker
+install -m 0755 -d /etc/apt/keyrings && \
 curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
 chmod a+r /etc/apt/keyrings/docker.asc && \
-echo \
-"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-bullseye stable" | \
-tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian trixie stable" \
+    > /etc/apt/sources.list.d/docker.list && \
 apt-get update && \
 apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin && \
 apt-get upgrade -y && \
