@@ -9,7 +9,7 @@ on:
 
 env:
   IMAGE_NAME: "buyfakett/jenkins"
-  JENKINS_VERSION: "2.525"
+  JENKINS_VERSION: "2.526"
 
 jobs:
   docker:
