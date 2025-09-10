@@ -1,6 +1,6 @@
 #!/bin/bash
 
-jenkins_version=2.526
+jenkins_version=2.527
 golang_version=1.25.1
 
 if [ ! -f apache-maven-3.6.3-bin.zip ];then

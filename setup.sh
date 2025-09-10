@@ -2,7 +2,7 @@
 echo 'Asia/Shanghai' > /etc/timezone
 
 port=8081
-jenkins_version=2.526
+jenkins_version=2.527
 
 docker kill jenkins-${port}
 docker rm jenkins-${port}
