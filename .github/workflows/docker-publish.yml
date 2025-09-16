@@ -32,9 +32,8 @@ jobs:
         run: |
           cd build
           chmod +x ./build.sh
-          # 为每个架构下载依赖（并行执行可优化，但此处简化为串行）
-          ./build.sh "amd64" "${{ env.JENKINS_VERSION }}" "${{ env.GOLANG_VERSION }}"
-          ./build.sh "arm64" "${{ env.JENKINS_VERSION }}" "${{ env.GOLANG_VERSION }}"
+          # 为每个架构下载依赖
+          ./build.sh "${{ matrix.arch }}" "${{ env.JENKINS_VERSION }}" "${{ env.GOLANG_VERSION }}"
 
       - name: 构建并推送多架构镜像
         uses: docker/build-push-action@v5
@@ -49,6 +48,6 @@ jobs:
             ${{ env.IMAGE_NAME }}:${{ env.JENKINS_VERSION }}
           # 传递参数给 Dockerfile
           build-args: |
-            ARCH=linux/amd64,linux/arm64  # 声明支持的架构
+            ARCH=${{ matrix.arch }}  # 传递当前架构
             JENKINS_VERSION=${{ env.JENKINS_VERSION }}
             GOLANG_VERSION=${{ env.GOLANG_VERSION }}
