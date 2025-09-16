@@ -66,9 +66,7 @@ rm -rf \
 /var/cache/* \
 /var/lib/apt/lists/* \
 /var/tmp/* \
-/var/log/*
-
-# 设置 svn
+/var/log/* && \
 svn --version && \
 sed -i 's/# store-passwords = no/store-passwords = yes/g' /root/.subversion/servers && \
 sed -i 's/# store-plaintext-passwords = no/store-plaintext-passwords = yes/g' /root/.subversion/servers && \
