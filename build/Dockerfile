@@ -2,21 +2,19 @@ FROM debian:13.1
 USER root
 
 # 接收架构和 Golang 版本参数
-ARG ARCH
 ARG GOLANG_VERSION
-ENV ARCH=$ARCH \
-    GOLANG_VERSION=$GOLANG_VERSION
+ENV GOLANG_VERSION=$GOLANG_VERSION
 
 # 配置 node（动态路径）
 WORKDIR /data/app/node/
-ADD node-v10.24.1-linux-${ARCH}.tar.xz /data/app/node/
-ADD node-v14.17.1-linux-${ARCH}.tar.xz /data/app/node/
-ADD node-v16.20.0-linux-${ARCH}.tar.xz /data/app/node/
-ADD node-v17.5.0-linux-${ARCH}.tar.xz /data/app/node/
-ADD node-v18.20.4-linux-${ARCH}.tar.xz /data/app/node/
-ADD node-v20.17.0-linux-${ARCH}.tar.xz /data/app/node/
-ADD node-v22.14.0-linux-${ARCH}.tar.xz /data/app/node/
-RUN ln -s /data/app/node/node-v14.17.1-linux-${ARCH}/ /data/app/node/node
+ADD node-v10.24.1-linux-${TARGETARCH}.tar.xz /data/app/node/
+ADD node-v14.17.1-linux-${TARGETARCH}.tar.xz /data/app/node/
+ADD node-v16.20.0-linux-${TARGETARCH}.tar.xz /data/app/node/
+ADD node-v17.5.0-linux-${TARGETARCH}.tar.xz /data/app/node/
+ADD node-v18.20.4-linux-${TARGETARCH}.tar.xz /data/app/node/
+ADD node-v20.17.0-linux-${TARGETARCH}.tar.xz /data/app/node/
+ADD node-v22.14.0-linux-${TARGETARCH}.tar.xz /data/app/node/
+RUN ln -s /data/app/node/node-v14.17.1-linux-${TARGETARCH}/ /data/app/node/node
 ENV NODE_PATH=/data/app/node/data/node_global/node_modules
 ENV PATH=/data/app/node/node/bin:$PATH
 ENV PATH=/data/app/node/data/node_global/bin:$PATH
@@ -36,7 +34,6 @@ RUN go env -w GOCACHE=/data/app/golang/.cache/go-build && \
 go env -w GOPATH=/data/app/golang/go
 
 # upx（动态架构）
-ARG UPX_ARCH=${ARCH}
 # 修改为：直接使用重命名后的文件（无需版本号）
 COPY upx-${UPX_ARCH}.tar.xz /tmp/upx.tar.xz
 RUN tar -xJf /tmp/upx.tar.xz -C /usr/local/bin --strip-components=1 && \
@@ -74,9 +71,9 @@ sed -i 's/# store-plaintext-passwords = no/store-plaintext-passwords = yes/g' /r
 echo "[auth]\nstore-passwords = no\n[helpers]\n[tunnels]\n[miscellany]\n[auto-props]" > /root/.subversion/config
 
 # 设置 java 环境（动态架构）
-ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-${ARCH}
+ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-${TARGETARCH}
 ENV PATH="$JAVA_HOME/bin:$PATH"
-RUN ln -s /usr/lib/jvm/java-8-openjdk-${ARCH}/ /usr/lib/jvm/java
+RUN ln -s /usr/lib/jvm/java-8-openjdk-${TARGETARCH}/ /usr/lib/jvm/java
 
 # 配置 maven
 COPY maven /data/app/maven
