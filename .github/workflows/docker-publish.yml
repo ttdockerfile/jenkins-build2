@@ -15,9 +15,6 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        arch: [amd64, arm64]  # 遍历双架构
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
@@ -25,7 +22,7 @@ jobs:
       - name: 设置 Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          driver-opts: network=host  # 加速构建网络
+          driver-opts: network=host
 
       - name: 登录 Docker Hub
         uses: docker/login-action@v3
@@ -33,26 +30,24 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: 下载依赖（调用 build.sh）
+      - name: 下载依赖
         run: |
           cd build
           chmod +x ./build.sh
-          # 为每个架构下载依赖
-          ./build.sh "${{ matrix.arch }}" "${{ env.JENKINS_VERSION }}" "${{ env.GOLANG_VERSION }}"
+          # 下载 amd64 架构依赖
+          ./build.sh "amd64" "${{ env.JENKINS_VERSION }}" "${{ env.GOLANG_VERSION }}"
+          # 下载 arm64 架构依赖
+          ./build.sh "arm64" "${{ env.JENKINS_VERSION }}" "${{ env.GOLANG_VERSION }}"
 
       - name: 构建并推送多架构镜像
         uses: docker/build-push-action@v5
         with:
-          context: .  # 上下文包含所有依赖
+          context: .
           file: Dockerfile
-          # 指定多架构（amd64+arm64）
           platforms: linux/amd64,linux/arm64
-          # 推送同一镜像标签（支持多架构）
           push: true
           tags: |
             ${{ env.IMAGE_NAME }}:${{ env.JENKINS_VERSION }}
-          # 传递参数给 Dockerfile
           build-args: |
-            ARCH=${{ matrix.arch }}  # 传递当前架构
             JENKINS_VERSION=${{ env.JENKINS_VERSION }}
             GOLANG_VERSION=${{ env.GOLANG_VERSION }}
