@@ -37,7 +37,8 @@ go env -w GOPATH=/data/app/golang/go
 
 # upx（动态架构）
 ARG UPX_ARCH=${ARCH}
-COPY upx-${UPX_VERSION:1}-${UPX_ARCH}_linux.tar.xz /tmp/upx.tar.xz
+# 修改为：直接使用重命名后的文件（无需版本号）
+COPY upx-${UPX_ARCH}.tar.xz /tmp/upx.tar.xz
 RUN tar -xJf /tmp/upx.tar.xz -C /usr/local/bin --strip-components=1 && \
     rm /tmp/upx.tar.xz
 ENV PATH="/usr/local/bin:$PATH"

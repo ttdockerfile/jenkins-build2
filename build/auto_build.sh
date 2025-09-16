@@ -37,6 +37,9 @@ if [ ! -f "$UPX_FILE" ]; then
     curl -LO "https://github.com/upx/upx/releases/download/${UPX_VERSION}/${UPX_FILE}"
 fi
 
+# 重命名 UPX 文件（移除版本号）- 新增关键步骤
+mv "$UPX_FILE" "upx-${arch}.tar.xz"
+
 # 清理并解压（不变）
 rm -rf go/ maven/
 tar -xzf go${GOLANG_VERSION}.linux-${arch}.tar.gz
