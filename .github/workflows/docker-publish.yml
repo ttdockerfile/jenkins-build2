@@ -10,40 +10,49 @@ on:
 env:
   IMAGE_NAME: "buyfakett/jenkins"
   JENKINS_VERSION: "2.527"
+  GOLANG_VERSION: "1.25.1"
 
 jobs:
-  docker:
+  build-and-push:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [amd64, arm64]  # 遍历双架构
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: 检出代码
+        uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2           
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v4
+      - name: 设置 Docker Buildx
+        uses: docker/setup-buildx-action@v3
         with:
-            images: ${{ env.IMAGE_NAME }}
+          driver-opts: network=host  # 加速构建网络
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
+      - name: 登录 Docker Hub
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build  And Push image
+      - name: 下载依赖（调用 build.sh）
         run: |
-          cd build
-          chmod 755 *.sh
-          ./auto_build.sh ${{ env.JENKINS_VERSION }}
-          docker push ${{ env.IMAGE_NAME }}:${{ env.JENKINS_VERSION }}
+          chmod +x ./build.sh
+          # 为每个架构下载依赖（并行执行可优化，但此处简化为串行）
+          ./build.sh "amd64" "${{ env.JENKINS_VERSION }}" "${{ env.GOLANG_VERSION }}"
+          ./build.sh "arm64" "${{ env.JENKINS_VERSION }}" "${{ env.GOLANG_VERSION }}"
 
-      # - name: Build Docker Image
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: .
-      #     platforms: linux/amd64
-      #     push: true
-      #     tags: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      - name: 构建并推送多架构镜像
+        uses: docker/build-push-action@v5
+        with:
+          context: .  # 上下文包含所有依赖
+          file: Dockerfile
+          # 指定多架构（amd64+arm64）
+          platforms: linux/amd64,linux/arm64
+          # 推送同一镜像标签（支持多架构）
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ env.JENKINS_VERSION }}
+          # 传递参数给 Dockerfile
+          build-args: |
+            ARCH=linux/amd64,linux/arm64  # 声明支持的架构
+            JENKINS_VERSION=${{ env.JENKINS_VERSION }}
+            GOLANG_VERSION=${{ env.GOLANG_VERSION }}
