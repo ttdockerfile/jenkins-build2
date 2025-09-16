@@ -13,41 +13,30 @@ env:
   GOLANG_VERSION: "1.25.1"
 
 jobs:
-  build-and-push:
+  docker:
     runs-on: ubuntu-latest
     steps:
-      - name: 检出代码
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: 设置 Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2           
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
         with:
-          driver-opts: network=host
+            images: ${{ env.IMAGE_NAME }}
 
-      - name: 登录 Docker Hub
-        uses: docker/login-action@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: 下载依赖
+      - name: Build  And Push image
         run: |
           cd build
-          chmod +x ./build.sh
-          # 下载 amd64 架构依赖
-          ./build.sh "amd64" "${{ env.JENKINS_VERSION }}" "${{ env.GOLANG_VERSION }}"
-          # 下载 arm64 架构依赖
-          ./build.sh "arm64" "${{ env.JENKINS_VERSION }}" "${{ env.GOLANG_VERSION }}"
-
-      - name: 构建并推送多架构镜像
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            ${{ env.IMAGE_NAME }}:${{ env.JENKINS_VERSION }}
-          build-args: |
-            JENKINS_VERSION=${{ env.JENKINS_VERSION }}
-            GOLANG_VERSION=${{ env.GOLANG_VERSION }}
+          chmod 755 *.sh
+          ./auto_build.sh ${{ env.JENKINS_VERSION }} ${{ env.GOLANG_VERSION }}
+          docker push ${{ env.IMAGE_NAME }}:${{ env.JENKINS_VERSION }}
