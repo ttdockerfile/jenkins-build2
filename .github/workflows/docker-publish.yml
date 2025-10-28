@@ -9,7 +9,7 @@ on:
 
 env:
   IMAGE_NAME: "buyfakett/jenkins"
-  JENKINS_VERSION: "2.533"
+  JENKINS_VERSION: "2.534"
   GOLANG_VERSION: "1.25.3"
 
 jobs:
