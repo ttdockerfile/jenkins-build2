@@ -10,6 +10,7 @@ ADD node-v17.5.0-linux-x64.tar.xz /data/app/node/
 ADD node-v18.20.4-linux-x64.tar.xz /data/app/node/
 ADD node-v20.17.0-linux-x64.tar.xz /data/app/node/
 ADD node-v22.14.0-linux-x64.tar.xz /data/app/node/
+ADD node-v24.11.0-linux-x64.tar.xz /data/app/node/
 RUN ln -s /data/app/node/node-v14.17.1-linux-x64/ /data/app/node/node
 ENV NODE_PATH=/data/app/node/data/node_global/node_modules
 ENV PATH=/data/app/node/node/bin:$PATH
@@ -40,7 +41,7 @@ sed -i '/zh_CN.UTF-8/s/^# //g' /etc/locale.gen && \
 locale-gen zh_CN.UTF-8 && \
 update-locale LANG=zh_CN.UTF-8 && \
 # 基础软件安装
-apt-get install -y zip unzip git curl subversion openjdk-8-jdk openjdk-11-jdk openjdk-21-jdk python3 python3-pip screen net-tools telnet vim wget eza && \
+apt-get install -y zip unzip git curl subversion openjdk-8-jdk openjdk-11-jdk openjdk-21-jdk openjdk-25-jdk python3 python3-pip screen net-tools telnet vim wget eza && \
 echo "alias ll='eza -al --color=always'" >> /root/.bashrc && \
 # 安装 docker
 install -m 0755 -d /etc/apt/keyrings && \

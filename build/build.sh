@@ -6,6 +6,9 @@ golang_version=1.25.1
 if [ ! -f apache-maven-3.6.3-bin.zip ];then
     wget https://github.com/buyfakett/centos7_initialization/releases/download/v1.2.3/apache-maven-3.6.3-bin.zip
 fi
+if [ ! -f node-v24.11.0-linux-x64.tar.xz ];then
+    wget https://github.com/buyfakett/centos7_initialization/releases/download/v1.2.3/node-v24.11.0-linux-x64.tar.xz
+fi
 if [ ! -f node-v22.14.0-linux-x64.tar.xz ];then
     wget https://github.com/buyfakett/centos7_initialization/releases/download/v1.2.3/node-v22.14.0-linux-x64.tar.xz
 fi
