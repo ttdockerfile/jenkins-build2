@@ -9,8 +9,8 @@ on:
 
 env:
   IMAGE_NAME: "buyfakett/jenkins"
-  JENKINS_VERSION: "2.539"
-  GOLANG_VERSION: "1.25.4"
+  JENKINS_VERSION: "2.540"
+  GOLANG_VERSION: "1.25.5"
 
 jobs:
   docker:
