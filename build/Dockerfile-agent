@@ -1,4 +1,4 @@
-FROM debian:13.3
+FROM debian:13.4
 USER root
 
 # 配置 node
